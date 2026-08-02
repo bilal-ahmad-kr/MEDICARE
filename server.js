@@ -10,6 +10,9 @@ app.use(express.json())
 const healthRoutes = require('./routes/health.routes')
 const connectDB = require('./config/db')
 const authRoutes = require('./routes/auth.routes.js')
+const adminRoutes = require("./routes/admin.routes");
+
+
 
 connectDB()
 
@@ -21,6 +24,7 @@ app.get('/api', (req, res) => {
 
 app.use('/api', healthRoutes)
 app.use('/api/auth', authRoutes)
+app.use("/api/admin", adminRoutes);
 
 
 

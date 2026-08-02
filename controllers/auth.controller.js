@@ -112,12 +112,32 @@ const loginUser = async (req, res) => {
   }
 };
 
-const getProfile = async(req, res) =>{
-  res.status(200).json({
-    success: true,
-    message: "Profile fetched successfully",
-    User: req.user,
-  })
+const getProfile = async (req, res) => {
+  try {
+    // User id get from middleware
+    const user = await User.findById(req.user?.id).select("-password");
+    
+    // If user not exist
+    if(!user){
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Success response
+    res.status(200).json({
+      success: true,
+      message: "Profile fetched successfully",
+      data: user,
+    });
+  } catch(error){
+    console.error(error)
+    res.status(500).json({
+      success: false,
+      message: "Internal Server error",
+    })
+  }
 }
 
-module.exports = { registerUser, loginUser, getProfile}
+module.exports = { registerUser, loginUser, getProfile }
